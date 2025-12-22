@@ -1,0 +1,5 @@
+SrNo,Name,Type,AvgAge,Description,Players,AvgPlayTimeMin,PriceUSD,Purchase,Comment,AvgBGGRating,AvgComplexityWeight,GameMechanics
+1,"Sushi Go",Cards,"8+","","2-5",15,6.29,"BF 2022","",,""
+2,"Bang",Dice,"8+","","3-8",15,13.50,"","",,""
+3,"Sheriff of Nottingham",Board,"14+","","2-5",60,24.00,"","",,""
+

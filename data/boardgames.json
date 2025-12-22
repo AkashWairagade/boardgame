@@ -1,0 +1,48 @@
+[
+  {
+    "srNo": 1,
+    "name": "Sushi Go",
+    "type": "Cards",
+    "avgAge": "8+",
+    "description": "",
+    "players": "2-5",
+    "avgPlayTimeMin": 15,
+    "priceUSD": 6.29,
+    "purchase": "BF 2022",
+    "comment": "",
+    "avgBGGRating": null,
+    "avgComplexityWeight": null,
+    "gameMechanics": ""
+  },
+  {
+    "srNo": 2,
+    "name": "Bang",
+    "type": "Dice",
+    "avgAge": "8+",
+    "description": "",
+    "players": "3-8",
+    "avgPlayTimeMin": 15,
+    "priceUSD": 13.50,
+    "purchase": "",
+    "comment": "",
+    "avgBGGRating": null,
+    "avgComplexityWeight": null,
+    "gameMechanics": ""
+  },
+  {
+    "srNo": 3,
+    "name": "Sheriff of Nottingham",
+    "type": "Board",
+    "avgAge": "14+",
+    "description": "",
+    "players": "2-5",
+    "avgPlayTimeMin": 60,
+    "priceUSD": 24.00,
+    "purchase": "",
+    "comment": "",
+    "avgBGGRating": null,
+    "avgComplexityWeight": null,
+    "gameMechanics": ""
+  }
+]
+
