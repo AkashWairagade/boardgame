@@ -1,59 +1,63 @@
-<!DOCTYPE html>
-    <html xmlns:th="http://www.thymeleaf.org">
-    <head>
-      <meta charset="UTF-8" />
-      <title>Boardgames</title>
-      <style>
-        table { border-collapse: collapse; width: 100%; }
-        th, td { border: 1px solid #ccc; padding: 6px; text-align: left; vertical-align: top; }
-        td.description, td.comment, td.mechanics { max-width: 300px; white-space: pre-wrap; word-wrap: break-word; }
-      </style>
-    </head>
-    <body>
-      <h1>Boardgames</h1>
-      <a th:href="@{/boardgames/new}">Add new</a>
-      <table>
-        <thead>
-          <tr>
-            <th>Id</th>
-            <th>Name</th>
-            <th>Type</th>
-            <th>Avg Age</th>
-            <th>Players</th>
-            <th>Avg Time (min)</th>
-            <th>Price (USD)</th>
-            <th>Purchase</th>
-            <th>Comment</th>
-            <th>BGG Rating</th>
-            <th>Complexity</th>
-            <th>Mechanics</th>
-            <th>Description</th>
-            <th>Actions</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr th:each="g : ${games}">
-            <td th:text="${g.srNo}">1</td>
-            <td th:text="${g.name}">Name</td>
-            <td th:text="${g.type}">Type</td>
-            <td th:text="${g.avgAge}">8+</td>
-            <td th:text="${g.players}">2-5</td>
-            <td th:text="${g.avgPlayTimeMin}">15</td>
-            <td th:text="${g.priceUSD}">6.29</td>
-            <td th:text="${g.purchase}"></td>
-            <td class="comment" th:text="${g.comment}"></td>
-            <td th:text="${g.avgBGGRating}"></td>
-            <td th:text="${g.avgComplexityWeight}"></td>
-            <td class="mechanics" th:text="${g.gameMechanics}"></td>
-            <td class="description" th:text="${g.description}"></td>
-            <td>
-              <a th:href="@{|/boardgames/edit/${g.srNo}|}">Edit</a>
-              <form th:action="@{|/boardgames/delete/${g.srNo}|}" method="post" style="display:inline">
-                <button type="submit">Delete</button>
-              </form>
-            </td>
-          </tr>
-        </tbody>
-      </table>
-    </body>
-    </html>
+<!-- html -->
+          <!DOCTYPE html>
+          <html xmlns:th="http://www.thymeleaf.org">
+          <head>
+            <meta charset="UTF-8" />
+            <title>Boardgame form</title>
+            <style>
+              label { display:block; margin-top:8px; }
+              input, textarea { width:100%; max-width:600px; }
+            </style>
+          </head>
+          <body>
+            <h1 th:text="${boardgame.srNo} ? 'Edit boardgame' : 'Add boardgame'">Form</h1>
+
+            <form th:action="@{/boardgames}" th:object="${boardgame}" method="post">
+              <input type="hidden" th:field="*{srNo}" />
+
+              <label>Name</label>
+              <input type="text" th:field="*{name}" />
+
+              <label>Type</label>
+              <input type="text" th:field="*{type}" />
+
+              <label>Avg Age</label>
+              <input type="text" th:field="*{avgAge}" />
+
+              <label>Players</label>
+              <input type="text" th:field="*{players}" />
+
+              <label>Avg Play Time (min)</label>
+              <input type="text" th:field="*{avgPlayTimeMin}" />
+
+              <label>Price (USD)</label>
+              <input type="number" step="0.01" th:field="*{priceUSD}" />
+
+              <label>Purchase</label>
+              <input type="text" th:field="*{purchase}" />
+
+              <label>Comment</label>
+              <textarea th:field="*{comment}" rows="3"></textarea>
+
+              <label>Avg BGG Rating</label>
+              <input type="number" step="0.1" th:field="*{avgBGGRating}" />
+
+              <label>Avg Complexity Weight</label>
+              <input type="number" step="0.1" th:field="*{avgComplexityWeight}" />
+
+              <label>Game Mechanics</label>
+              <textarea th:field="*{gameMechanics}" rows="2"></textarea>
+
+              <label>Description</label>
+              <textarea th:field="*{description}" rows="4"></textarea>
+
+              <!-- CSRF token if Spring Security enabled -->
+              <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" th:if="${_csrf != null}" />
+
+              <div style="margin-top:12px;">
+                <button type="submit">Save</button>
+                <a th:href="@{/boardgames}">Cancel</a>
+              </div>
+            </form>
+          </body>
+          </html>

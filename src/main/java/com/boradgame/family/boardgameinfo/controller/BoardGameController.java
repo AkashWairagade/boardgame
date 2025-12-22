@@ -6,6 +6,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.Optional;
+
 @Controller
 @RequestMapping("/boardgames")
 public class BoardGameController {
@@ -32,9 +34,14 @@ public class BoardGameController {
     }
 
     @GetMapping("/edit/{id}")
-    public String editForm(@PathVariable int id, Model model) {
-        repo.findById(id).ifPresent(g -> model.addAttribute("boardGame", g));
-        return "boardgames/form";
+    public String editForm(@PathVariable("id") Integer id, Model model) {
+        Optional<BoardGame> opt = repo.findById(id);
+        if (opt.isPresent()) {
+            model.addAttribute("boardgame", opt.get());
+            return "boardgames/form";
+        } else {
+            return "redirect:/boardgames";
+        }
     }
 
     @PostMapping("/update")
