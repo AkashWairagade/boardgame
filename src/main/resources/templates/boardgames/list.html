@@ -3,32 +3,139 @@
 <head>
   <meta charset="UTF-8" />
   <title>Boardgames</title>
+  <link rel="stylesheet" th:href="@{/css/boardgames.css}" />
 </head>
 <body>
-  <h1>Boardgames</h1>
-  <a th:href="@{/boardgames/new}">Add new</a>
-  <table border="1">
-    <thead>
-      <tr>
-        <th>Id</th><th>Name</th><th>Type</th><th>Players</th><th>Avg Time</th><th>Price</th><th>Actions</th>
-      </tr>
-    </thead>
-    <tbody>
-      <tr th:each="g : ${games}">
-        <td th:text="${g.srNo}">1</td>
-        <td th:text="${g.name}">Name</td>
-        <td th:text="${g.type}">Type</td>
-        <td th:text="${g.players}">2-5</td>
-        <td th:text="${g.avgPlayTimeMin}">15</td>
-        <td th:text="${g.priceUSD}">6.29</td>
-        <td>
-          <a th:href="@{|/boardgames/edit/${g.srNo}|}">Edit</a>
-          <form th:action="@{|/boardgames/delete/${g.srNo}|}" method="post" style="display:inline">
-            <button type="submit">Delete</button>
-          </form>
-        </td>
-      </tr>
-    </tbody>
-  </table>
+  <div class="container" th:with="filters=${filters != null ? filters : #maps.map()}">
+    <h1>Boardgames</h1>
+    <div class="top-actions">
+      <a class="btn primary" th:href="@{/boardgames/new}">Add new</a>
+    </div>
+
+    <form method="get" th:action="@{/boardgames}" class="filters">
+      <div class="filter-row">
+        <input type="text" name="sr_no" placeholder="Filter by Id" th:value="${filters['sr_no']}" />
+        <input type="text" name="name" placeholder="Filter by name" th:value="${filters['name']}" />
+        <input type="text" name="type" placeholder="Filter by type" th:value="${filters['type']}" />
+        <input type="text" name="avg_age" placeholder="Filter by Avg Age" th:value="${filters['avg_age']}" />
+        <input type="text" name="description" placeholder="Filter by description" th:value="${filters['description']}" />
+        <input type="text" name="players" placeholder="Filter by players" th:value="${filters['players']}" />
+        <input type="text" name="avg_play_time_min" placeholder="Filter by Avg Time" th:value="${filters['avg_play_time_min']}" />
+        <input type="text" name="price_usd" placeholder="Filter by price" th:value="${filters['price_usd']}" />
+        <input type="text" name="purchase" placeholder="Filter by purchase" th:value="${filters['purchase']}" />
+        <input type="text" name="purchase_date" placeholder="Filter by purchase date" th:value="${filters['purchase_date']}" />
+        <input type="text" name="comment" placeholder="Filter by comment" th:value="${filters['comment']}" />
+        <input type="text" name="avg_bgg_rating" placeholder="Filter by BGG Rating" th:value="${filters['avg_bgg_rating']}" />
+        <input type="text" name="avg_complexity_weight" placeholder="Filter by complexity" th:value="${filters['avg_complexity_weight']}" />
+        <input type="text" name="game_mechanics" placeholder="Filter by mechanics" th:value="${filters['game_mechanics']}" />
+        <button type="submit" class="btn">Apply</button>
+        <a class="btn" th:href="@{/boardgames}">Clear</a>
+      </div>
+    </form>
+
+    <table class="games-table">
+      <thead>
+        <tr>
+          <th>
+            <a th:href="@{/boardgames(sortBy='sr_no', sortDir=${sortBy=='sr_no' and sortDir=='asc' ? 'desc' : 'asc'}, sr_no=${filters['sr_no']}, name=${filters['name']}, type=${filters['type']}, avg_age=${filters['avg_age']}, description=${filters['description']}, players=${filters['players']}, avg_play_time_min=${filters['avg_play_time_min']}, price_usd=${filters['price_usd']}, purchase=${filters['purchase']}, comment=${filters['comment']}, avg_bgg_rating=${filters['avg_bgg_rating']}, avg_complexity_weight=${filters['avg_complexity_weight']}, game_mechanics=${filters['game_mechanics']})}">
+              Id
+            </a>
+          </th>
+          <th>
+            <a th:href="@{/boardgames(sortBy='name', sortDir=${sortBy=='name' and sortDir=='asc' ? 'desc' : 'asc'}, sr_no=${filters['sr_no']}, name=${filters['name']}, type=${filters['type']}, avg_age=${filters['avg_age']}, description=${filters['description']}, players=${filters['players']}, avg_play_time_min=${filters['avg_play_time_min']}, price_usd=${filters['price_usd']}, purchase=${filters['purchase']}, comment=${filters['comment']}, avg_bgg_rating=${filters['avg_bgg_rating']}, avg_complexity_weight=${filters['avg_complexity_weight']}, game_mechanics=${filters['game_mechanics']})}">
+              Name
+            </a>
+          </th>
+          <th>
+            <a th:href="@{/boardgames(sortBy='type', sortDir=${sortBy=='type' and sortDir=='asc' ? 'desc' : 'asc'}, sr_no=${filters['sr_no']}, name=${filters['name']}, type=${filters['type']}, avg_age=${filters['avg_age']}, description=${filters['description']}, players=${filters['players']}, avg_play_time_min=${filters['avg_play_time_min']}, price_usd=${filters['price_usd']}, purchase=${filters['purchase']}, comment=${filters['comment']}, avg_bgg_rating=${filters['avg_bgg_rating']}, avg_complexity_weight=${filters['avg_complexity_weight']}, game_mechanics=${filters['game_mechanics']})}">
+              Type
+            </a>
+          </th>
+          <th>
+            <a th:href="@{/boardgames(sortBy='avg_age', sortDir=${sortBy=='avg_age' and sortDir=='asc' ? 'desc' : 'asc'}, sr_no=${filters['sr_no']}, name=${filters['name']}, type=${filters['type']}, avg_age=${filters['avg_age']}, description=${filters['description']}, players=${filters['players']}, avg_play_time_min=${filters['avg_play_time_min']}, price_usd=${filters['price_usd']}, purchase=${filters['purchase']}, comment=${filters['comment']}, avg_bgg_rating=${filters['avg_bgg_rating']}, avg_complexity_weight=${filters['avg_complexity_weight']}, game_mechanics=${filters['game_mechanics']})}">
+              Avg Age
+            </a>
+          </th>
+          <th>
+            <a th:href="@{/boardgames(sortBy='description', sortDir=${sortBy=='description' and sortDir=='asc' ? 'desc' : 'asc'}, sr_no=${filters['sr_no']}, name=${filters['name']}, type=${filters['type']}, avg_age=${filters['avg_age']}, description=${filters['description']}, players=${filters['players']}, avg_play_time_min=${filters['avg_play_time_min']}, price_usd=${filters['price_usd']}, purchase=${filters['purchase']}, comment=${filters['comment']}, avg_bgg_rating=${filters['avg_bgg_rating']}, avg_complexity_weight=${filters['avg_complexity_weight']}, game_mechanics=${filters['game_mechanics']})}">
+              Description
+            </a>
+          </th>
+          <th>
+            <a th:href="@{/boardgames(sortBy='players', sortDir=${sortBy=='players' and sortDir=='asc' ? 'desc' : 'asc'}, sr_no=${filters['sr_no']}, name=${filters['name']}, type=${filters['type']}, avg_age=${filters['avg_age']}, description=${filters['description']}, players=${filters['players']}, avg_play_time_min=${filters['avg_play_time_min']}, price_usd=${filters['price_usd']}, purchase=${filters['purchase']}, comment=${filters['comment']}, avg_bgg_rating=${filters['avg_bgg_rating']}, avg_complexity_weight=${filters['avg_complexity_weight']}, game_mechanics=${filters['game_mechanics']})}">
+              Players
+            </a>
+          </th>
+          <th>
+            <a th:href="@{/boardgames(sortBy='avg_play_time_min', sortDir=${sortBy=='avg_play_time_min' and sortDir=='asc' ? 'desc' : 'asc'}, sr_no=${filters['sr_no']}, name=${filters['name']}, type=${filters['type']}, avg_age=${filters['avg_age']}, description=${filters['description']}, players=${filters['players']}, avg_play_time_min=${filters['avg_play_time_min']}, price_usd=${filters['price_usd']}, purchase=${filters['purchase']}, comment=${filters['comment']}, avg_bgg_rating=${filters['avg_bgg_rating']}, avg_complexity_weight=${filters['avg_complexity_weight']}, game_mechanics=${filters['game_mechanics']})}">
+              Avg Time
+            </a>
+          </th>
+          <th>
+            <a th:href="@{/boardgames(sortBy='price_usd', sortDir=${sortBy=='price_usd' and sortDir=='asc' ? 'desc' : 'asc'}, sr_no=${filters['sr_no']}, name=${filters['name']}, type=${filters['type']}, avg_age=${filters['avg_age']}, description=${filters['description']}, players=${filters['players']}, avg_play_time_min=${filters['avg_play_time_min']}, price_usd=${filters['price_usd']}, purchase=${filters['purchase']}, comment=${filters['comment']}, avg_bgg_rating=${filters['avg_bgg_rating']}, avg_complexity_weight=${filters['avg_complexity_weight']}, game_mechanics=${filters['game_mechanics']})}">
+              Price
+            </a>
+          </th>
+          <th>
+            <a th:href="@{/boardgames(sortBy='purchase', sortDir=${sortBy=='purchase' and sortDir=='asc' ? 'desc' : 'asc'}, sr_no=${filters['sr_no']}, name=${filters['name']}, type=${filters['type']}, avg_age=${filters['avg_age']}, description=${filters['description']}, players=${filters['players']}, avg_play_time_min=${filters['avg_play_time_min']}, price_usd=${filters['price_usd']}, purchase=${filters['purchase']}, comment=${filters['comment']}, avg_bgg_rating=${filters['avg_bgg_rating']}, avg_complexity_weight=${filters['avg_complexity_weight']}, game_mechanics=${filters['game_mechanics']})}">
+              Purchase
+            </a>
+          </th>
+          <th>
+            <a th:href="@{/boardgames(sortBy='purchase_date', sortDir=${sortBy=='purchase_date' and sortDir=='asc' ? 'desc' : 'asc'}, sr_no=${filters['sr_no']}, name=${filters['name']}, type=${filters['type']}, avg_age=${filters['avg_age']}, description=${filters['description']}, players=${filters['players']}, avg_play_time_min=${filters['avg_play_time_min']}, price_usd=${filters['price_usd']}, purchase=${filters['purchase']}, comment=${filters['comment']}, avg_bgg_rating=${filters['avg_bgg_rating']}, avg_complexity_weight=${filters['avg_complexity_weight']}, game_mechanics=${filters['game_mechanics']})}">
+              Purchase Date
+            </a>
+          </th>
+          <th>
+            <a th:href="@{/boardgames(sortBy='comment', sortDir=${sortBy=='comment' and sortDir=='asc' ? 'desc' : 'asc'}, sr_no=${filters['sr_no']}, name=${filters['name']}, type=${filters['type']}, avg_age=${filters['avg_age']}, description=${filters['description']}, players=${filters['players']}, avg_play_time_min=${filters['avg_play_time_min']}, price_usd=${filters['price_usd']}, purchase=${filters['purchase']}, comment=${filters['comment']}, avg_bgg_rating=${filters['avg_bgg_rating']}, avg_complexity_weight=${filters['avg_complexity_weight']}, game_mechanics=${filters['game_mechanics']})}">
+              Comment
+            </a>
+          </th>
+          <th>
+            <a th:href="@{/boardgames(sortBy='avg_bgg_rating', sortDir=${sortBy=='avg_bgg_rating' and sortDir=='asc' ? 'desc' : 'asc'}, sr_no=${filters['sr_no']}, name=${filters['name']}, type=${filters['type']}, avg_age=${filters['avg_age']}, description=${filters['description']}, players=${filters['players']}, avg_play_time_min=${filters['avg_play_time_min']}, price_usd=${filters['price_usd']}, purchase=${filters['purchase']}, comment=${filters['comment']}, avg_bgg_rating=${filters['avg_bgg_rating']}, avg_complexity_weight=${filters['avg_complexity_weight']}, game_mechanics=${filters['game_mechanics']})}">
+              Avg BGG Rating
+            </a>
+          </th>
+          <th>
+            <a th:href="@{/boardgames(sortBy='avg_complexity_weight', sortDir=${sortBy=='avg_complexity_weight' and sortDir=='asc' ? 'desc' : 'asc'}, sr_no=${filters['sr_no']}, name=${filters['name']}, type=${filters['type']}, avg_age=${filters['avg_age']}, description=${filters['description']}, players=${filters['players']}, avg_play_time_min=${filters['avg_play_time_min']}, price_usd=${filters['price_usd']}, purchase=${filters['purchase']}, comment=${filters['comment']}, avg_bgg_rating=${filters['avg_bgg_rating']}, avg_complexity_weight=${filters['avg_complexity_weight']}, game_mechanics=${filters['game_mechanics']})}">
+              Avg Complexity
+            </a>
+          </th>
+          <th>
+            <a th:href="@{/boardgames(sortBy='game_mechanics', sortDir=${sortBy=='game_mechanics' and sortDir=='asc' ? 'desc' : 'asc'}, sr_no=${filters['sr_no']}, name=${filters['name']}, type=${filters['type']}, avg_age=${filters['avg_age']}, description=${filters['description']}, players=${filters['players']}, avg_play_time_min=${filters['avg_play_time_min']}, price_usd=${filters['price_usd']}, purchase=${filters['purchase']}, comment=${filters['comment']}, avg_bgg_rating=${filters['avg_bgg_rating']}, avg_complexity_weight=${filters['avg_complexity_weight']}, game_mechanics=${filters['game_mechanics']})}">
+              Game Mechanics
+            </a>
+          </th>
+          <th>Actions</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr th:each="g : ${games}">
+          <td data-label="Id" th:text="${g.srNo}">1</td>
+          <td data-label="Name" th:text="${g.name}">Name</td>
+          <td data-label="Type" th:text="${g.type}">Type</td>
+          <td data-label="Avg Age" th:text="${g.avgAge}">8+</td>
+          <td data-label="Description" th:text="${g.description}">Description</td>
+          <td data-label="Players" th:text="${g.players}">2-5</td>
+          <td data-label="Avg Time" th:text="${g.avgPlayTimeMin}">15</td>
+          <td data-label="Price" th:text="${g.priceUSD}">6.29</td>
+          <td data-label="Purchase" th:text="${g.purchase}">BF 2022</td>
+          <td data-label="Purchase Date">
+            <span th:if="${g.purchaseDate != null}" th:text="${#temporals.format(g.purchaseDate, 'dd MMM yyyy')}"></span>
+          </td>
+          <td data-label="Comment" th:text="${g.comment}"></td>
+          <td data-label="Avg BGG Rating" th:text="${g.avgBGGRating}"></td>
+          <td data-label="Avg Complexity" th:text="${g.avgComplexityWeight}"></td>
+          <td data-label="Game Mechanics" th:text="${g.gameMechanics}"></td>
+          <td data-label="Actions">
+            <a class="btn" th:href="@{|/boardgames/edit/${g.srNo}|}">Edit</a>
+            <form th:action="@{|/boardgames/delete/${g.srNo}|}" method="post" style="display:inline">
+              <button type="submit" class="btn danger">Delete</button>
+            </form>
+          </td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
 </body>
 </html>

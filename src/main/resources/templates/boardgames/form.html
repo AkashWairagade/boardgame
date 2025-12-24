@@ -1,63 +1,141 @@
 <!-- html -->
-          <!DOCTYPE html>
-          <html xmlns:th="http://www.thymeleaf.org">
-          <head>
-            <meta charset="UTF-8" />
-            <title>Boardgame form</title>
-            <style>
-              label { display:block; margin-top:8px; }
-              input, textarea { width:100%; max-width:600px; }
-            </style>
-          </head>
-          <body>
-            <h1 th:text="${boardgame.srNo} ? 'Edit boardgame' : 'Add boardgame'">Form</h1>
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8" />
+  <title th:text="${boardgame.srNo} ? 'Edit boardgame' : 'Add boardgame'">Boardgame form</title>
+  <link rel="stylesheet" th:href="@{/css/boardgames.css}" />
+  <style>
+    /* Local form styles to make the form professional and responsive */
+    .form-card {
+      max-width: 900px;
+      margin: 24px auto;
+      padding: 20px;
+      background: #fff;
+      border-radius: 8px;
+      box-shadow: 0 6px 18px rgba(20,20,20,0.08);
+      font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, 'Helvetica Neue', Arial;
+    }
+    .form-header {
+      display:flex;justify-content:space-between;align-items:center;margin-bottom:12px;
+    }
+    .form-header h1{margin:0;font-size:1.25rem;color:#222}
+    .form-grid{
+      display:grid;
+      grid-template-columns:1fr 1fr;
+      gap:12px 20px;
+      align-items:start;
+    }
+    .form-row{display:flex;flex-direction:column}
+    label{font-weight:600;margin-bottom:6px;color:#333;font-size:0.95rem}
+    input[type=text], input[type=number], input[type=date], textarea, select{
+      padding:8px 10px;border:1px solid #dcdcdc;border-radius:6px;font-size:0.95rem;background:#fafafa;
+    }
+    textarea{min-height:88px;resize:vertical}
+    .full { grid-column: 1 / -1; }
 
-            <form th:action="@{/boardgames}" th:object="${boardgame}" method="post">
-              <input type="hidden" th:field="*{srNo}" />
+    .help { font-size:0.85rem;color:#666;margin-top:6px }
+    .actions{display:flex;gap:10px;justify-content:flex-end;margin-top:16px}
+    .btn{display:inline-block;padding:8px 14px;border-radius:6px;border:none;cursor:pointer;font-weight:600}
+    .btn.primary{background:#2563eb;color:white}
+    .btn.ghost{background:transparent;border:1px solid #d1d5db;color:#111}
+    .btn.secondary{background:#6b7280;color:white}
 
-              <label>Name</label>
-              <input type="text" th:field="*{name}" />
+    @media (max-width:720px){
+      .form-grid{grid-template-columns:1fr}
+    }
+  </style>
+</head>
+<body>
+  <div class="form-card">
+    <div class="form-header">
+      <h1 th:text="${boardgame.srNo} ? 'Edit boardgame' : 'Add boardgame'">Form</h1>
+      <div>
+        <a th:href="@{/boardgames}" class="btn ghost">Back to list</a>
+      </div>
+    </div>
 
-              <label>Type</label>
-              <input type="text" th:field="*{type}" />
+    <form th:action="@{/boardgames}" th:object="${boardgame}" method="post" novalidate>
+      <input type="hidden" th:field="*{srNo}" />
 
-              <label>Avg Age</label>
-              <input type="text" th:field="*{avgAge}" />
+      <div class="form-grid">
+        <div class="form-row">
+          <label for="name">Name <span style="color:#d00">*</span></label>
+          <input id="name" type="text" th:field="*{name}" placeholder="Enter game name" required />
+          <div class="help" th:if="${#fields.hasErrors('name')}" th:errors="*{name}"></div>
+        </div>
 
-              <label>Players</label>
-              <input type="text" th:field="*{players}" />
+        <div class="form-row">
+          <label for="type">Type</label>
+          <input id="type" type="text" th:field="*{type}" placeholder="e.g., Board, Card, Tile" />
+        </div>
 
-              <label>Avg Play Time (min)</label>
-              <input type="text" th:field="*{avgPlayTimeMin}" />
+        <div class="form-row">
+          <label for="avgAge">Avg Age</label>
+          <input id="avgAge" type="text" th:field="*{avgAge}" placeholder="e.g., 8+, 10+" />
+        </div>
 
-              <label>Price (USD)</label>
-              <input type="number" step="0.01" th:field="*{priceUSD}" />
+        <div class="form-row">
+          <label for="players">Players</label>
+          <input id="players" type="text" th:field="*{players}" placeholder="e.g., 2-5, 1-4" />
+        </div>
 
-              <label>Purchase</label>
-              <input type="text" th:field="*{purchase}" />
+        <div class="form-row">
+          <label for="avgPlayTimeMin">Avg Play Time (min)</label>
+          <input id="avgPlayTimeMin" type="text" th:field="*{avgPlayTimeMin}" placeholder="e.g., 30 or 30-60" />
+        </div>
 
-              <label>Comment</label>
-              <textarea th:field="*{comment}" rows="3"></textarea>
+        <div class="form-row">
+          <label for="priceUSD">Price (USD)</label>
+          <input id="priceUSD" type="number" step="0.01" th:field="*{priceUSD}" placeholder="0.00" />
+        </div>
 
-              <label>Avg BGG Rating</label>
-              <input type="number" step="0.1" th:field="*{avgBGGRating}" />
+        <div class="form-row">
+          <label for="purchase">Purchase (text)</label>
+          <input id="purchase" type="text" th:field="*{purchase}" placeholder="Original purchase note e.g., BF 2022, Gift" />
+          <div class="help">Free-text note; use the date field for structured purchase date.</div>
+        </div>
 
-              <label>Avg Complexity Weight</label>
-              <input type="number" step="0.1" th:field="*{avgComplexityWeight}" />
+        <div class="form-row">
+          <label for="purchaseDate">Purchase date</label>
+          <input id="purchaseDate" type="date" th:field="*{purchaseDate}" />
+          <div class="help">Select a date (yyyy-mm-dd). Leave empty if unknown.</div>
+        </div>
 
-              <label>Game Mechanics</label>
-              <textarea th:field="*{gameMechanics}" rows="2"></textarea>
+        <div class="form-row full">
+          <label for="comment">Comment</label>
+          <textarea id="comment" th:field="*{comment}" rows="2" placeholder="Optional notes or location of purchase"></textarea>
+        </div>
 
-              <label>Description</label>
-              <textarea th:field="*{description}" rows="4"></textarea>
+        <div class="form-row">
+          <label for="avgBGGRating">Avg BGG Rating</label>
+          <input id="avgBGGRating" type="number" step="0.1" th:field="*{avgBGGRating}" placeholder="e.g., 7.5" />
+        </div>
 
-              <!-- CSRF token if Spring Security enabled -->
-              <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" th:if="${_csrf != null}" />
+        <div class="form-row">
+          <label for="avgComplexityWeight">Avg Complexity Weight</label>
+          <input id="avgComplexityWeight" type="number" step="0.1" th:field="*{avgComplexityWeight}" placeholder="e.g., 2.5" />
+        </div>
 
-              <div style="margin-top:12px;">
-                <button type="submit">Save</button>
-                <a th:href="@{/boardgames}">Cancel</a>
-              </div>
-            </form>
-          </body>
-          </html>
+        <div class="form-row full">
+          <label for="gameMechanics">Game Mechanics</label>
+          <textarea id="gameMechanics" th:field="*{gameMechanics}" rows="3" placeholder="Comma-separated or short description"></textarea>
+        </div>
+
+        <div class="form-row full">
+          <label for="description">Description</label>
+          <textarea id="description" th:field="*{description}" rows="5" placeholder="Short description of the game"></textarea>
+        </div>
+      </div>
+
+      <!-- CSRF token if Spring Security enabled -->
+      <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}" th:if="${_csrf != null}" />
+
+      <div class="actions">
+        <a th:href="@{/boardgames}" class="btn ghost">Cancel</a>
+        <button type="submit" class="btn primary">Save</button>
+      </div>
+    </form>
+  </div>
+</body>
+</html>

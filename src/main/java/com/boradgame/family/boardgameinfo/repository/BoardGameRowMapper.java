@@ -5,6 +5,7 @@ import org.springframework.jdbc.core.RowMapper;
 
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.time.LocalDate;
 
 public class BoardGameRowMapper implements RowMapper<BoardGame> {
     @Override
@@ -19,6 +20,8 @@ public class BoardGameRowMapper implements RowMapper<BoardGame> {
         b.setAvgPlayTimeMin(rs.getString("avg_play_time_min"));
         b.setPriceUSD(rs.getBigDecimal("price_usd"));
         b.setPurchase(rs.getString("purchase"));
+        java.sql.Date pd = rs.getDate("purchase_date");
+        if (pd != null) b.setPurchaseDate(pd.toLocalDate());
         b.setComment(rs.getString("comment"));
         b.setAvgBGGRating(rs.getBigDecimal("avg_bgg_rating"));
         b.setAvgComplexityWeight(rs.getBigDecimal("avg_complexity_weight"));

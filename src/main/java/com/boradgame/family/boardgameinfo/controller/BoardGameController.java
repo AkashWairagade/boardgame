@@ -6,6 +6,8 @@ import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import java.util.HashMap;
+import java.util.Map;
 import java.util.Optional;
 
 @Controller
@@ -15,15 +17,26 @@ public class BoardGameController {
 
     public BoardGameController(BoardGameRepository repo) { this.repo = repo; }
 
-    @GetMapping
-    public String list(Model model) {
-        model.addAttribute("games", repo.findAll());
+    // Map only the empty subpath so TrailingSlashController can handle `/boardgames/` explicitly
+    @GetMapping("")
+    public String list(@RequestParam Map<String, String> params, Model model) {
+        // Extract sort params (if any)
+        String sortBy = params.remove("sortBy");
+        String sortDir = params.remove("sortDir");
+
+        // pass remaining params as filters
+        Map<String, String> filters = new HashMap<>(params);
+
+        model.addAttribute("games", repo.findAll(filters, sortBy, sortDir));
+        model.addAttribute("filters", filters);
+        model.addAttribute("sortBy", sortBy);
+        model.addAttribute("sortDir", sortDir);
         return "boardgames/list";
     }
 
     @GetMapping("/new")
     public String createForm(Model model) {
-        model.addAttribute("boardGame", new BoardGame());
+        model.addAttribute("boardgame", new BoardGame());
         return "boardgames/form";
     }
 
@@ -58,7 +71,7 @@ public class BoardGameController {
 
     @GetMapping("/form.html")
     public String legacyFormHtml(Model model) {
-        model.addAttribute("boardGame", new BoardGame());
+        model.addAttribute("boardgame", new BoardGame());
         return "boardgames/form";
     }
 

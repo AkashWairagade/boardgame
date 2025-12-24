@@ -6,6 +6,8 @@ import lombok.NoArgsConstructor;
 import lombok.ToString;
 
 import java.math.BigDecimal;
+import java.time.LocalDate;
+
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
@@ -20,6 +22,7 @@ public class BoardGame {
     private String avgPlayTimeMin;
     private BigDecimal priceUSD;
     private String purchase;
+    private LocalDate purchaseDate;
     private String comment;
     private BigDecimal avgBGGRating;
     private BigDecimal avgComplexityWeight;
