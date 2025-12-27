@@ -14,9 +14,145 @@
     .metric h3{margin:0;font-size:0.9rem;color:#374151}
     .metric .value{font-weight:700;font-size:1.25rem;margin-top:6px;color:#111}
     .metrics-scroll{max-height:80px;overflow-y:auto;padding-right:6px}
+
+    /* page container to keep everything centered and readable */
+    .container{ max-width:1200px; margin:12px auto; padding:12px; }
+    /* make filters wrap nicely on small screens */
+    .filters .filter-row{ display:flex; flex-wrap:wrap; gap:8px; align-items:center; }
+    .filters input[type="text"]{ min-width:140px; padding:6px 8px; border-radius:6px; border:1px solid #e6edf3; }
+    .top-actions{ margin-bottom:8px; display:flex; justify-content:flex-end; gap:8px; }
+
+    /* Table wrapper provides horizontal AND vertical scrolling and visible scrollbar */
+    .table-wrapper{
+      width:100%;
+      overflow:auto;              /* allow both horizontal and vertical scroll */
+      -webkit-overflow-scrolling:touch;
+      margin:12px 0;
+      padding:8px;
+      background:#ffffff;
+      border-radius:8px;
+      box-shadow:0 4px 12px rgba(0,0,0,0.04);
+      /* limit height so vertical scrollbar appears and table remains visible on one page
+         adjust the constant if you have larger header/filters. */
+      max-height: calc(100vh - 320px);
+    }
+    /* Visible scrollbar (WebKit) - both horizontal (height) and vertical (width) */
+    .table-wrapper::-webkit-scrollbar{ height:10px; width:10px; }
+    .table-wrapper::-webkit-scrollbar-track{ background:transparent; }
+    .table-wrapper::-webkit-scrollbar-thumb{ background:rgba(0,0,0,0.18); border-radius:6px; }
+    .table-wrapper::-webkit-scrollbar-thumb:hover{ background:rgba(0,0,0,0.28); }
+
+    /* Firefox */
+    .table-wrapper{ scrollbar-width:thin; scrollbar-color: rgba(0,0,0,0.18) transparent; }
+
+    /* Make the table wide so horizontal scroll appears on small viewports */
+    .games-table{
+      width:100%;
+      border-collapse:collapse;
+      min-width:1300px; /* adjust as needed for your columns */
+    }
+    .games-table th, .games-table td{
+      padding:10px 12px;
+      border-bottom:1px solid #eef2f7;
+      text-align:left;
+      white-space:nowrap; /* keep columns from wrapping so scroll is useful */
+      vertical-align:middle;
+    }
+    /* Sticky header for better UX while scrolling horizontally/vertically */
+    .games-table thead th{
+      position:sticky;
+      top:0;
+      background:#f9fafb;
+      z-index:3;
+      box-shadow: 0 2px 6px rgba(0,0,0,0.04); /* subtle separation from rows when scrolling */
+    }
+    /* Row styles for readability */
+    .games-table tbody tr:nth-child(even){ background:#fcfdff; }
+    .games-table tbody tr:hover{ background:#f1f5f9; }
+
+    /* Truncate long cell texts to prevent huge rows; user can scroll to see full row */
+    .games-table td[data-label]{
+      max-width:220px;
+      overflow:hidden;
+      text-overflow:ellipsis;
+    }
+    /* Keep header links clean */
+    .games-table th a{ color:inherit; text-decoration:none; }
+
+    /* column hide helper */
+    .hidden-col { display: none; }
+    /* compact column chooser */
+    .columns-chooser{ display:flex; align-items:center; gap:8px; margin-bottom:8px; flex-wrap:wrap; }
+    .columns-chooser .chooser-btn{ background:#fff; border:1px solid #e5e7eb; padding:6px 10px; border-radius:6px; cursor:pointer; }
+    .columns-chooser .chooser-list{ display:flex; gap:8px; flex-wrap:wrap; }
+    .columns-chooser label{ font-size:13px; color:#111827; display:flex; align-items:center; gap:6px; background:#f8fafc; padding:4px 8px; border-radius:6px; }
+
+    /* make the chooser controls compact on narrow viewports */
+    @media (max-width:900px){
+      .columns-chooser .chooser-list{ max-width:100%; overflow:auto; padding:6px 0; }
+      .columns-chooser label{ font-size:12px; }
+    }
+
+    /* Branding & typography */
+    @import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap');
+    :root{
+      --bg:#f6f8fb; --card:#ffffff; --muted:#6b7280; --accent:#0f172a; --primary:#0b73ff;
+      --accent-soft: rgba(11,115,255,0.08);
+    }
+    body{ font-family: 'Inter', system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial; background:var(--bg); color:var(--accent); }
+
+    /* Header with logo */
+    .app-header{ display:flex; align-items:center; gap:12px; max-width:1200px; margin:18px auto; padding:12px 18px; background:linear-gradient(90deg,#ffffff 0%, #fbfdff 100%); border-radius:10px; box-shadow:0 6px 18px rgba(11,23,40,0.04);}
+    .app-logo{ display:flex; align-items:center; gap:12px; }
+    .app-logo img{ height:46px; width:46px; object-fit:contain; border-radius:8px; box-shadow:0 6px 18px rgba(11,23,40,0.06); background: #fff; padding:6px; }
+    .brand-title{ font-size:1.25rem; font-weight:700; color:var(--accent); }
+    .brand-sub{ font-size:0.85rem; color:var(--muted); margin-top:2px; }
+
+    /* Buttons */
+    .btn{ display:inline-block; padding:6px 10px; border-radius:8px; border:1px solid transparent; background:transparent; cursor:pointer; font-weight:600; color:var(--accent); text-decoration:none; }
+    .btn.primary{ background:var(--primary); color:#fff; box-shadow:0 6px 16px rgba(11,115,255,0.12); }
+    .btn.danger{ background:#ff4949; color:#fff; border-radius:6px; padding:6px 8px; border: none; }
+    .btn.primary:hover{ transform:translateY(-1px); }
+
+    /* Game thumbnail inside name column */
+    .game-thumb{ height:48px; width:48px; object-fit:cover; border-radius:6px; margin-right:10px; box-shadow:0 6px 18px rgba(11,23,40,0.06); background:#fff; display:inline-block; vertical-align:middle; }
+    .name-cell{ display:flex; align-items:center; gap:8px; max-width:360px; }
+    .name-cell .game-title{ white-space:normal; overflow:hidden; text-overflow:ellipsis; max-width:260px; font-weight:600; }
+
+    /* subtle table refines to look modern */
+    .games-table thead th{ color:var(--muted); font-weight:600; font-size:0.9rem; letter-spacing:0.2px; }
+    .games-table tbody td{ background:transparent; }
+    .games-table tbody tr{ transition: background 120ms ease, transform 120ms ease; }
+    .games-table tbody tr:hover{ transform:translateY(-2px); box-shadow:0 8px 20px rgba(11,23,40,0.04); }
+    /* small responsive tweak */
+    @media (max-width:700px){
+      .game-thumb{ height:40px; width:40px; }
+      .name-cell .game-title{ max-width:160px; font-size:0.95rem; }
+    }
+
+    /* Drag & drop styles for columns */
+    th[data-col]{ user-select:none; }
+    .drag-handle{ cursor:grab; display:inline-block; margin-right:8px; color:#64748b; font-size:14px; }
+    th.dragging{ opacity:0.6; }
+    th.drag-over{ outline:2px dashed rgba(11,115,255,0.7); background:rgba(11,115,255,0.03); }
+    /* make handle less intrusive on small screens */
+    @media (max-width:600px){ .drag-handle{ font-size:12px; margin-right:6px; } }
   </style>
 </head>
+
 <body>
+  <!-- Top header with logo + brand -->
+  <div class="app-header">
+    <div class="app-logo">
+      <!-- Put a logo file at: src/main/resources/static/images/logo.png -->
+      <img src="/images/logo.png" alt="BoardGame Info logo" onerror="this.style.display='none'"/>
+    </div>
+    <div>
+      <div class="brand-title">BoardGame Info</div>
+      <div class="brand-sub">Catalog of your board games — covers & details at a glance</div>
+    </div>
+  </div>
+
   <div class="container" th:with="filters=${filters != null ? filters : #maps.map()}">
     <h1>Boardgames</h1>
     <div class="top-actions">
@@ -53,7 +189,7 @@
 
     <form method="get" th:action="@{/boardgames}" class="filters">
       <div class="filter-row">
-        <input type="text" name="sr_no" placeholder="Filter by Id" th:value="${filters['sr_no']}" />
+        <!-- Id filter removed -->
         <input type="text" name="name" placeholder="Filter by name" th:value="${filters['name']}" />
         <input type="text" name="type" placeholder="Filter by type" th:value="${filters['type']}" />
         <input type="text" name="avg_age" placeholder="Filter by Avg Age" th:value="${filters['avg_age']}" />
@@ -72,109 +208,261 @@
       </div>
     </form>
 
-    <table class="games-table">
-      <thead>
-        <tr>
-          <th>
-            <a th:href="@{/boardgames(sortBy='sr_no', sortDir=${sortBy=='sr_no' and sortDir=='asc' ? 'desc' : 'asc'}, sr_no=${filters['sr_no']}, name=${filters['name']}, type=${filters['type']}, avg_age=${filters['avg_age']}, description=${filters['description']}, players=${filters['players']}, avg_play_time_min=${filters['avg_play_time_min']}, price_usd=${filters['price_usd']}, purchase=${filters['purchase']}, comment=${filters['comment']}, avg_bgg_rating=${filters['avg_bgg_rating']}, avg_complexity_weight=${filters['avg_complexity_weight']}, game_mechanics=${filters['game_mechanics']})}">
-              Id
-            </a>
-          </th>
-          <th>
-            <a th:href="@{/boardgames(sortBy='name', sortDir=${sortBy=='name' and sortDir=='asc' ? 'desc' : 'asc'}, sr_no=${filters['sr_no']}, name=${filters['name']}, type=${filters['type']}, avg_age=${filters['avg_age']}, description=${filters['description']}, players=${filters['players']}, avg_play_time_min=${filters['avg_play_time_min']}, price_usd=${filters['price_usd']}, purchase=${filters['purchase']}, comment=${filters['comment']}, avg_bgg_rating=${filters['avg_bgg_rating']}, avg_complexity_weight=${filters['avg_complexity_weight']}, game_mechanics=${filters['game_mechanics']})}">
-              Name
-            </a>
-          </th>
-          <th>
-            <a th:href="@{/boardgames(sortBy='type', sortDir=${sortBy=='type' and sortDir=='asc' ? 'desc' : 'asc'}, sr_no=${filters['sr_no']}, name=${filters['name']}, type=${filters['type']}, avg_age=${filters['avg_age']}, description=${filters['description']}, players=${filters['players']}, avg_play_time_min=${filters['avg_play_time_min']}, price_usd=${filters['price_usd']}, purchase=${filters['purchase']}, comment=${filters['comment']}, avg_bgg_rating=${filters['avg_bgg_rating']}, avg_complexity_weight=${filters['avg_complexity_weight']}, game_mechanics=${filters['game_mechanics']})}">
-              Type
-            </a>
-          </th>
-          <th>
-            <a th:href="@{/boardgames(sortBy='avg_age', sortDir=${sortBy=='avg_age' and sortDir=='asc' ? 'desc' : 'asc'}, sr_no=${filters['sr_no']}, name=${filters['name']}, type=${filters['type']}, avg_age=${filters['avg_age']}, description=${filters['description']}, players=${filters['players']}, avg_play_time_min=${filters['avg_play_time_min']}, price_usd=${filters['price_usd']}, purchase=${filters['purchase']}, comment=${filters['comment']}, avg_bgg_rating=${filters['avg_bgg_rating']}, avg_complexity_weight=${filters['avg_complexity_weight']}, game_mechanics=${filters['game_mechanics']})}">
-              Avg Age
-            </a>
-          </th>
-          <th>
-            <a th:href="@{/boardgames(sortBy='description', sortDir=${sortBy=='description' and sortDir=='asc' ? 'desc' : 'asc'}, sr_no=${filters['sr_no']}, name=${filters['name']}, type=${filters['type']}, avg_age=${filters['avg_age']}, description=${filters['description']}, players=${filters['players']}, avg_play_time_min=${filters['avg_play_time_min']}, price_usd=${filters['price_usd']}, purchase=${filters['purchase']}, comment=${filters['comment']}, avg_bgg_rating=${filters['avg_bgg_rating']}, avg_complexity_weight=${filters['avg_complexity_weight']}, game_mechanics=${filters['game_mechanics']})}">
-              Description
-            </a>
-          </th>
-          <th>
-            <a th:href="@{/boardgames(sortBy='players', sortDir=${sortBy=='players' and sortDir=='asc' ? 'desc' : 'asc'}, sr_no=${filters['sr_no']}, name=${filters['name']}, type=${filters['type']}, avg_age=${filters['avg_age']}, description=${filters['description']}, players=${filters['players']}, avg_play_time_min=${filters['avg_play_time_min']}, price_usd=${filters['price_usd']}, purchase=${filters['purchase']}, comment=${filters['comment']}, avg_bgg_rating=${filters['avg_bgg_rating']}, avg_complexity_weight=${filters['avg_complexity_weight']}, game_mechanics=${filters['game_mechanics']})}">
-              Players
-            </a>
-          </th>
-          <th>
-            <a th:href="@{/boardgames(sortBy='avg_play_time_min', sortDir=${sortBy=='avg_play_time_min' and sortDir=='asc' ? 'desc' : 'asc'}, sr_no=${filters['sr_no']}, name=${filters['name']}, type=${filters['type']}, avg_age=${filters['avg_age']}, description=${filters['description']}, players=${filters['players']}, avg_play_time_min=${filters['avg_play_time_min']}, price_usd=${filters['price_usd']}, purchase=${filters['purchase']}, comment=${filters['comment']}, avg_bgg_rating=${filters['avg_bgg_rating']}, avg_complexity_weight=${filters['avg_complexity_weight']}, game_mechanics=${filters['game_mechanics']})}">
-              Avg Time
-            </a>
-          </th>
-          <th>
-            <a th:href="@{/boardgames(sortBy='price_usd', sortDir=${sortBy=='price_usd' and sortDir=='asc' ? 'desc' : 'asc'}, sr_no=${filters['sr_no']}, name=${filters['name']}, type=${filters['type']}, avg_age=${filters['avg_age']}, description=${filters['description']}, players=${filters['players']}, avg_play_time_min=${filters['avg_play_time_min']}, price_usd=${filters['price_usd']}, purchase=${filters['purchase']}, comment=${filters['comment']}, avg_bgg_rating=${filters['avg_bgg_rating']}, avg_complexity_weight=${filters['avg_complexity_weight']}, game_mechanics=${filters['game_mechanics']})}">
-              Price
-            </a>
-          </th>
-          <th>
-            <a th:href="@{/boardgames(sortBy='purchase', sortDir=${sortBy=='purchase' and sortDir=='asc' ? 'desc' : 'asc'}, sr_no=${filters['sr_no']}, name=${filters['name']}, type=${filters['type']}, avg_age=${filters['avg_age']}, description=${filters['description']}, players=${filters['players']}, avg_play_time_min=${filters['avg_play_time_min']}, price_usd=${filters['price_usd']}, purchase=${filters['purchase']}, comment=${filters['comment']}, avg_bgg_rating=${filters['avg_bgg_rating']}, avg_complexity_weight=${filters['avg_complexity_weight']}, game_mechanics=${filters['game_mechanics']})}">
-              Purchase
-            </a>
-          </th>
-          <th>
-            <a th:href="@{/boardgames(sortBy='purchase_date', sortDir=${sortBy=='purchase_date' and sortDir=='asc' ? 'desc' : 'asc'}, sr_no=${filters['sr_no']}, name=${filters['name']}, type=${filters['type']}, avg_age=${filters['avg_age']}, description=${filters['description']}, players=${filters['players']}, avg_play_time_min=${filters['avg_play_time_min']}, price_usd=${filters['price_usd']}, purchase=${filters['purchase']}, comment=${filters['comment']}, avg_bgg_rating=${filters['avg_bgg_rating']}, avg_complexity_weight=${filters['avg_complexity_weight']}, game_mechanics=${filters['game_mechanics']})}">
-              Purchase Date
-            </a>
-          </th>
-          <th>
-            <a th:href="@{/boardgames(sortBy='comment', sortDir=${sortBy=='comment' and sortDir=='asc' ? 'desc' : 'asc'}, sr_no=${filters['sr_no']}, name=${filters['name']}, type=${filters['type']}, avg_age=${filters['avg_age']}, description=${filters['description']}, players=${filters['players']}, avg_play_time_min=${filters['avg_play_time_min']}, price_usd=${filters['price_usd']}, purchase=${filters['purchase']}, comment=${filters['comment']}, avg_bgg_rating=${filters['avg_bgg_rating']}, avg_complexity_weight=${filters['avg_complexity_weight']}, game_mechanics=${filters['game_mechanics']})}">
-              Comment
-            </a>
-          </th>
-          <th>
-            <a th:href="@{/boardgames(sortBy='avg_bgg_rating', sortDir=${sortBy=='avg_bgg_rating' and sortDir=='asc' ? 'desc' : 'asc'}, sr_no=${filters['sr_no']}, name=${filters['name']}, type=${filters['type']}, avg_age=${filters['avg_age']}, description=${filters['description']}, players=${filters['players']}, avg_play_time_min=${filters['avg_play_timeMin']}, price_usd=${filters['price_usd']}, purchase=${filters['purchase']}, comment=${filters['comment']}, avg_bgg_rating=${filters['avg_bgg_rating']}, avg_complexity_weight=${filters['avg_complexity_weight']}, game_mechanics=${filters['game_mechanics']})}">
-              Avg BGG Rating
-            </a>
-          </th>
-          <th>
-            <a th:href="@{/boardgames(sortBy='avg_complexity_weight', sortDir=${sortBy=='avg_complexity_weight' and sortDir=='asc' ? 'desc' : 'asc'}, sr_no=${filters['sr_no']}, name=${filters['name']}, type=${filters['type']}, avg_age=${filters['avg_age']}, description=${filters['description']}, players=${filters['players']}, avg_play_time_min=${filters['avg_play_timeMin']}, price_usd=${filters['price_usd']}, purchase=${filters['purchase']}, comment=${filters['comment']}, avg_bgg_rating=${filters['avg_bgg_rating']}, avg_complexity_weight=${filters['avg_complexity_weight']}, game_mechanics=${filters['game_mechanics']})}">
-              Avg Complexity
-            </a>
-          </th>
-          <th>
-            <a th:href="@{/boardgames(sortBy='game_mechanics', sortDir=${sortBy=='game_mechanics' and sortDir=='asc' ? 'desc' : 'asc'}, sr_no=${filters['sr_no']}, name=${filters['name']}, type=${filters['type']}, avg_age=${filters['avg_age']}, description=${filters['description']}, players=${filters['players']}, avg_play_time_min=${filters['avg_play_timeMin']}, price_usd=${filters['price_usd']}, purchase=${filters['purchase']}, comment=${filters['comment']}, avg_bgg_rating=${filters['avg_bgg_rating']}, avg_complexity_weight=${filters['avg_complexity_weight']}, game_mechanics=${filters['game_mechanics']})}">
-              Game Mechanics
-            </a>
-          </th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        <tr th:each="g : ${games}">
-          <td data-label="Id" th:text="${g.srNo}">1</td>
-          <td data-label="Name" th:text="${g.name}">Name</td>
-          <td data-label="Type" th:text="${g.type}">Type</td>
-          <td data-label="Avg Age" th:text="${g.avgAge}">8+</td>
-          <td data-label="Description" th:text="${g.description}">Description</td>
-          <td data-label="Players" th:text="${g.players}">2-5</td>
-          <td data-label="Avg Time" th:text="${g.avgPlayTimeMin}">15</td>
-          <td data-label="Price" th:text="${g.priceUSD}">6.29</td>
-          <td data-label="Purchase" th:text="${g.purchase}">BF 2022</td>
-          <td data-label="Purchase Date">
-            <span th:if="${g.purchaseDate != null}" th:text="${#temporals.format(g.purchaseDate, 'dd MMM yyyy')}"></span>
-          </td>
-          <td data-label="Comment" th:text="${g.comment}"></td>
-          <td data-label="Avg BGG Rating" th:text="${g.avgBGGRating}"></td>
-          <td data-label="Avg Complexity" th:text="${g.avgComplexityWeight}"></td>
-          <td data-label="Game Mechanics" th:text="${g.gameMechanics}"></td>
-          <td data-label="Actions">
-            <a class="btn" th:href="@{|/boardgames/edit/${g.srNo}|}">Edit</a>
-            <form th:action="@{|/boardgames/delete/${g.srNo}|}" method="post" style="display:inline">
-              <button type="submit" class="btn danger">Delete</button>
-            </form>
-          </td>
-        </tr>
-      </tbody>
-    </table>
-  </div>
+    <!-- Columns chooser -->
+     <div class="columns-chooser" aria-label="Columns chooser">
+       <div class="chooser-btn" role="button" aria-expanded="true">Columns</div>
+       <div class="chooser-list" id="games-columns-list" aria-hidden="false">
+         <!-- Checkboxes will be generated/initialized by JS if you prefer dynamic creation.
+              Below are static checkboxes as example; update data-col keys to match headers. -->
+         <label><input type="checkbox" data-col="name" checked> Name</label>
+         <label><input type="checkbox" data-col="type" checked> Type</label>
+         <label><input type="checkbox" data-col="avg_age" checked> Avg Age</label>
+         <label><input type="checkbox" data-col="description" checked> Description</label>
+         <label><input type="checkbox" data-col="players" checked> Players</label>
+         <label><input type="checkbox" data-col="avg_play_time_min" checked> Play Time</label>
+         <label><input type="checkbox" data-col="price_usd" checked> Price</label>
+         <label><input type="checkbox" data-col="purchase" checked> Purchase</label>
+         <label><input type="checkbox" data-col="purchase_date" checked> Purchase Date</label>
+         <label><input type="checkbox" data-col="comment" checked> Comment</label>
+         <label><input type="checkbox" data-col="avg_bgg_rating" checked> BGG Rating</label>
+         <label><input type="checkbox" data-col="avg_complexity_weight" checked> Complexity</label>
+         <label><input type="checkbox" data-col="game_mechanics" checked> Mechanics</label>
+         <label><input type="checkbox" data-col="actions" checked> Actions</label>
+         <button id="games-columns-reset" class="chooser-btn" type="button">Reset</button>
+       </div>
+     </div>
+
+     <div class="table-wrapper">
+       <table class="games-table">
+         <thead>
+           <tr>
+             <!-- Id column removed -->
+             <th data-col="name">
+               <a th:href="@{/boardgames(sortBy='name', sortDir=${sortBy=='name' and sortDir=='asc' ? 'desc' : 'asc'}, sr_no=${filters['sr_no']}, name=${filters['name']}, type=${filters['type']}, avg_age=${filters['avg_age']}, description=${filters['description']}, players=${filters['players']}, avg_play_time_min=${filters['avg_play_time_min']}, price_usd=${filters['price_usd']}, purchase=${filters['purchase']}, comment=${filters['comment']}, avg_bgg_rating=${filters['avg_bgg_rating']}, avg_complexity_weight=${filters['avg_complexity_weight']}, game_mechanics=${filters['game_mechanics']})}">
+                 Name
+               </a>
+             </th>
+             <th data-col="type">
+               <a th:href="@{/boardgames(sortBy='type', sortDir=${sortBy=='type' and sortDir=='asc' ? 'desc' : 'asc'}, sr_no=${filters['sr_no']}, name=${filters['name']}, type=${filters['type']}, avg_age=${filters['avg_age']}, description=${filters['description']}, players=${filters['players']}, avg_play_time_min=${filters['avg_play_time_min']}, price_usd=${filters['price_usd']}, purchase=${filters['purchase']}, comment=${filters['comment']}, avg_bgg_rating=${filters['avg_bgg_rating']}, avg_complexity_weight=${filters['avg_complexity_weight']}, game_mechanics=${filters['game_mechanics']})}">
+                 Type
+               </a>
+             </th>
+             <th data-col="avg_age">
+               <a th:href="@{/boardgames(sortBy='avg_age', sortDir=${sortBy=='avg_age' and sortDir=='asc' ? 'desc' : 'asc'}, sr_no=${filters['sr_no']}, name=${filters['name']}, type=${filters['type']}, avg_age=${filters['avg_age']}, description=${filters['description']}, players=${filters['players']}, avg_play_time_min=${filters['avg_play_time_min']}, price_usd=${filters['price_usd']}, purchase=${filters['purchase']}, comment=${filters['comment']}, avg_bgg_rating=${filters['avg_bgg_rating']}, avg_complexity_weight=${filters['avg_complexity_weight']}, game_mechanics=${filters['game_mechanics']})}">
+                 Avg Age
+               </a>
+             </th>
+             <th data-col="description">
+               <a th:href="@{/boardgames(sortBy='description', sortDir=${sortBy=='description' and sortDir=='asc' ? 'desc' : 'asc'}, sr_no=${filters['sr_no']}, name=${filters['name']}, type=${filters['type']}, avg_age=${filters['avg_age']}, description=${filters['description']}, players=${filters['players']}, avg_play_time_min=${filters['avg_play_time_min']}, price_usd=${filters['price_usd']}, purchase=${filters['purchase']}, comment=${filters['comment']}, avg_bgg_rating=${filters['avg_bgg_rating']}, avg_complexity_weight=${filters['avg_complexity_weight']}, game_mechanics=${filters['game_mechanics']})}">
+                 Description
+               </a>
+             </th>
+             <th data-col="players">
+               <a th:href="@{/boardgames(sortBy='players', sortDir=${sortBy=='players' and sortDir=='asc' ? 'desc' : 'asc'}, sr_no=${filters['sr_no']}, name=${filters['name']}, type=${filters['type']}, avg_age=${filters['avg_age']}, description=${filters['description']}, players=${filters['players']}, avg_play_time_min=${filters['avg_play_time_min']}, price_usd=${filters['price_usd']}, purchase=${filters['purchase']}, comment=${filters['comment']}, avg_bgg_rating=${filters['avg_bgg_rating']}, avg_complexity_weight=${filters['avg_complexity_weight']}, game_mechanics=${filters['game_mechanics']})}">
+                 Players
+               </a>
+             </th>
+             <th data-col="avg_play_time_min">
+               <a th:href="@{/boardgames(sortBy='avg_play_time_min', sortDir=${sortBy=='avg_play_time_min' and sortDir=='asc' ? 'desc' : 'asc'}, sr_no=${filters['sr_no']}, name=${filters['name']}, type=${filters['type']}, avg_age=${filters['avg_age']}, description=${filters['description']}, players=${filters['players']}, avg_play_time_min=${filters['avg_play_time_min']}, price_usd=${filters['price_usd']}, purchase=${filters['purchase']}, comment=${filters['comment']}, avg_bgg_rating=${filters['avg_bgg_rating']}, avg_complexity_weight=${filters['avg_complexity_weight']}, game_mechanics=${filters['game_mechanics']})}">
+                 Avg Time
+               </a>
+             </th>
+             <th data-col="price_usd">
+               <a th:href="@{/boardgames(sortBy='price_usd', sortDir=${sortBy=='price_usd' and sortDir=='asc' ? 'desc' : 'asc'}, sr_no=${filters['sr_no']}, name=${filters['name']}, type=${filters['type']}, avg_age=${filters['avg_age']}, description=${filters['description']}, players=${filters['players']}, avg_play_time_min=${filters['avg_play_time_min']}, price_usd=${filters['price_usd']}, purchase=${filters['purchase']}, comment=${filters['comment']}, avg_bgg_rating=${filters['avg_bgg_rating']}, avg_complexity_weight=${filters['avg_complexity_weight']}, game_mechanics=${filters['game_mechanics']})}">
+                 Price
+               </a>
+             </th>
+             <th data-col="purchase">
+               <a th:href="@{/boardgames(sortBy='purchase', sortDir=${sortBy=='purchase' and sortDir=='asc' ? 'desc' : 'asc'}, sr_no=${filters['sr_no']}, name=${filters['name']}, type=${filters['type']}, avg_age=${filters['avg_age']}, description=${filters['description']}, players=${filters['players']}, avg_play_time_min=${filters['avg_play_time_min']}, price_usd=${filters['price_usd']}, purchase=${filters['purchase']}, comment=${filters['comment']}, avg_bgg_rating=${filters['avg_bgg_rating']}, avg_complexity_weight=${filters['avg_complexity_weight']}, game_mechanics=${filters['game_mechanics']})}">
+                 Purchase
+               </a>
+             </th>
+             <th data-col="purchase_date">
+               <a th:href="@{/boardgames(sortBy='purchase_date', sortDir=${sortBy=='purchase_date' and sortDir=='asc' ? 'desc' : 'asc'}, sr_no=${filters['sr_no']}, name=${filters['name']}, type=${filters['type']}, avg_age=${filters['avg_age']}, description=${filters['description']}, players=${filters['players']}, avg_play_time_min=${filters['avg_play_time_min']}, price_usd=${filters['price_usd']}, purchase=${filters['purchase']}, comment=${filters['comment']}, avg_bgg_rating=${filters['avg_bgg_rating']}, avg_complexity_weight=${filters['avg_complexity_weight']}, game_mechanics=${filters['game_mechanics']})}">
+                 Purchase Date
+               </a>
+             </th>
+             <th data-col="comment">
+               <a th:href="@{/boardgames(sortBy='comment', sortDir=${sortBy=='comment' and sortDir=='asc' ? 'desc' : 'asc'}, sr_no=${filters['sr_no']}, name=${filters['name']}, type=${filters['type']}, avg_age=${filters['avg_age']}, description=${filters['description']}, players=${filters['players']}, avg_play_time_min=${filters['avg_play_timeMin']}, price_usd=${filters['price_usd']}, purchase=${filters['purchase']}, comment=${filters['comment']}, avg_bgg_rating=${filters['avg_bgg_rating']}, avg_complexity_weight=${filters['avg_complexity_weight']}, game_mechanics=${filters['game_mechanics']})}">
+                 Comment
+               </a>
+             </th>
+             <th data-col="avg_bgg_rating">
+               <a th:href="@{/boardgames(sortBy='avg_bgg_rating', sortDir=${sortBy=='avg_bgg_rating' and sortDir=='asc' ? 'desc' : 'asc'}, sr_no=${filters['sr_no']}, name=${filters['name']}, type=${filters['type']}, avg_age=${filters['avg_age']}, description=${filters['description']}, players=${filters['players']}, avg_play_time_min=${filters['avg_play_timeMin']}, price_usd=${filters['price_usd']}, purchase=${filters['purchase']}, comment=${filters['comment']}, avg_bgg_rating=${filters['avg_bgg_rating']}, avg_complexity_weight=${filters['avg_complexity_weight']}, game_mechanics=${filters['game_mechanics']})}">
+                 Avg BGG Rating
+               </a>
+             </th>
+             <th data-col="avg_complexity_weight">
+               <a th:href="@{/boardgames(sortBy='avg_complexity_weight', sortDir=${sortBy=='avg_complexity_weight' and sortDir=='asc' ? 'desc' : 'asc'}, sr_no=${filters['sr_no']}, name=${filters['name']}, type=${filters['type']}, avg_age=${filters['avg_age']}, description=${filters['description']}, players=${filters['players']}, avg_play_time_min=${filters['avg_play_timeMin']}, price_usd=${filters['price_usd']}, purchase=${filters['purchase']}, comment=${filters['comment']}, avg_bgg_rating=${filters['avg_bgg_rating']}, avg_complexity_weight=${filters['avg_complexity_weight']}, game_mechanics=${filters['game_mechanics']})}">
+                 Avg Complexity
+               </a>
+             </th>
+             <th data-col="game_mechanics">
+               <a th:href="@{/boardgames(sortBy='game_mechanics', sortDir=${sortBy=='game_mechanics' and sortDir=='asc' ? 'desc' : 'asc'}, sr_no=${filters['sr_no']}, name=${filters['name']}, type=${filters['type']}, avg_age=${filters['avg_age']}, description=${filters['description']}, players=${filters['players']}, avg_play_time_min=${filters['avg_play_timeMin']}, price_usd=${filters['price_usd']}, purchase=${filters['purchase']}, comment=${filters['comment']}, avg_bgg_rating=${filters['avg_bgg_rating']}, avg_complexity_weight=${filters['avg_complexity_weight']}, game_mechanics=${filters['game_mechanics']})}">
+                 Game Mechanics
+               </a>
+             </th>
+             <th data-col="actions">Actions</th>
+           </tr>
+         </thead>
+         <tbody>
+           <tr th:each="g : ${games}">
+             <td data-col="name" data-label="Name">
+               <div class="name-cell">
+                 <div>
+                   <div class="game-title" th:text="${g.name}">Game name</div>
+                   <div style="font-size:0.85rem;color:var(--muted)" th:text="${g.type}">Type</div>
+                 </div>
+               </div>
+             </td>
+             <td data-col="type" data-label="Type" th:text="${g.type}">Type</td>
+             <td data-col="avg_age" data-label="Avg Age" th:text="${g.avgAge}">10+</td>
+             <td data-col="description" data-label="Description" th:text="${g.description}">Description</td>
+             <td data-col="players" data-label="Players" th:text="${g.players}">2-5</td>
+             <td data-col="avg_play_time_min" data-label="Avg Time" th:text="${g.avgPlayTimeMin}">15</td>
+             <td data-col="price_usd" data-label="Price" th:text="${g.priceUSD}">6.29</td>
+             <td data-col="purchase" data-label="Purchase" th:text="${g.purchase}">BF 2022</td>
+             <td data-col="purchase_date" data-label="Purchase Date">
+               <span th:if="${g.purchaseDate != null}" th:text="${#temporals.format(g.purchaseDate, 'dd MMM yyyy')}"></span>
+             </td>
+             <td data-col="comment" data-label="Comment" th:text="${g.comment}"></td>
+             <td data-col="avg_bgg_rating" data-label="Avg BGG Rating" th:text="${g.avgBGGRating}"></td>
+             <td data-col="avg_complexity_weight" data-label="Avg Complexity" th:text="${g.avgComplexityWeight}"></td>
+             <td data-col="game_mechanics" data-label="Game Mechanics" th:text="${g.gameMechanics}"></td>
+             <td data-col="actions" data-label="Actions">
+               <a class="btn" th:href="@{|/boardgames/edit/${g.srNo}|}">Edit</a>
+               <form th:action="@{|/boardgames/delete/${g.srNo}|}" method="post" style="display:inline">
+                 <button type="submit" class="btn danger">Delete</button>
+               </form>
+             </td>
+           </tr>
+         </tbody>
+       </table>
+     </div>
+   </div>
+
+   <!-- include the column toggle JS -->
+   <script src="/js/games-table-columns.js"></script>
+
+   <!-- Column drag & drop: reorder headers and corresponding cells, persist order -->
+   <script>
+     (function(){
+       const STORAGE_KEY = 'gamesTableColumnsOrder';
+       function saveOrder(){
+         const cols = Array.from(document.querySelectorAll('.games-table thead th[data-col]'))
+                           .map(th => th.getAttribute('data-col'));
+         localStorage.setItem(STORAGE_KEY, JSON.stringify(cols));
+       }
+       function applySavedOrder(){
+         const raw = localStorage.getItem(STORAGE_KEY);
+         if(!raw) return;
+         try{
+           const desired = JSON.parse(raw);
+           const theadRow = document.querySelector('.games-table thead tr');
+           if(!theadRow) return;
+           // map existing headers
+           const existing = Array.from(theadRow.querySelectorAll('th[data-col]'));
+           const map = new Map(existing.map(th => [th.getAttribute('data-col'), th]));
+           // reorder headers according to saved order
+           desired.forEach(col => { const th = map.get(col); if(th) theadRow.appendChild(th); map.delete(col); });
+           // append any remaining headers not in saved order
+           map.forEach(th => theadRow.appendChild(th));
+           // reorder tbody cells for each row to match header order
+           document.querySelectorAll('.games-table tbody tr').forEach(tr => {
+             const tdMap = new Map(Array.from(tr.querySelectorAll('td[data-col]')).map(td => [td.getAttribute('data-col'), td]));
+             desired.forEach(col => { const td = tdMap.get(col); if(td) tr.appendChild(td); tdMap.delete(col); });
+             tdMap.forEach(td => tr.appendChild(td));
+           });
+         }catch(e){ /* ignore malformed storage */ }
+       }
+
+      function attachDragHandlers(){
+        const theadRow = document.querySelector('.games-table thead tr');
+        if(!theadRow) return;
+        let dragSrc = null;
+
+        function onDragStart(e){
+          dragSrc = this;
+          this.classList.add('dragging');
+          e.dataTransfer.effectAllowed = 'move';
+          e.dataTransfer.setData('text/plain', this.getAttribute('data-col'));
+        }
+        function onDragOver(e){
+          e.preventDefault();
+          e.dataTransfer.dropEffect = 'move';
+          if(this !== dragSrc) this.classList.add('drag-over');
+        }
+        function onDragLeave(){
+          this.classList.remove('drag-over');
+        }
+        function onDrop(e){
+          e.preventDefault();
+          this.classList.remove('drag-over');
+          if(!dragSrc || dragSrc === this) return;
+
+          const srcCol = dragSrc.getAttribute('data-col');
+          const tgtCol = this.getAttribute('data-col');
+
+          // reorder header
+          const headers = Array.from(theadRow.querySelectorAll('th[data-col]'));
+          const srcIndex = headers.indexOf(dragSrc);
+          const tgtIndex = headers.indexOf(this);
+          if(srcIndex < 0 || tgtIndex < 0) return;
+
+          if(srcIndex < tgtIndex) theadRow.insertBefore(dragSrc, this.nextSibling);
+          else theadRow.insertBefore(dragSrc, this);
+
+          // reorder body cells for every row
+          document.querySelectorAll('.games-table tbody tr').forEach(tr => {
+            const cells = Array.from(tr.querySelectorAll('td[data-col]'));
+            const srcTd = cells.find(td => td.getAttribute('data-col') === srcCol);
+            const tgtTd = cells.find(td => td.getAttribute('data-col') === tgtCol);
+            if(!srcTd || !tgtTd) return;
+            const srcIdx = cells.indexOf(srcTd);
+            const tgtIdx = cells.indexOf(tgtTd);
+            if(srcIdx < tgtIdx) tr.insertBefore(srcTd, tgtTd.nextSibling);
+            else tr.insertBefore(srcTd, tgtTd);
+          });
+
+          // persist new order
+          saveOrder();
+        }
+        function onDragEnd(){
+          if(dragSrc) dragSrc.classList.remove('dragging');
+          dragSrc = null;
+          document.querySelectorAll('th.drag-over').forEach(h => h.classList.remove('drag-over'));
+        }
+
+        // initialize each header: add handle, draggable attr and events
+        const headers = Array.from(theadRow.querySelectorAll('th[data-col]'));
+        headers.forEach(th => {
+          th.setAttribute('draggable','true');
+          // avoid adding duplicate handles if script re-runs
+          if(!th.querySelector('.drag-handle')){
+            const handle = document.createElement('span');
+            handle.className = 'drag-handle';
+            handle.innerText = '≡';
+            // prepend but keep existing content
+            th.insertBefore(handle, th.firstChild);
+          }
+          th.addEventListener('dragstart', onDragStart);
+          th.addEventListener('dragover', onDragOver);
+          th.addEventListener('dragleave', onDragLeave);
+          th.addEventListener('drop', onDrop);
+          th.addEventListener('dragend', onDragEnd);
+        });
+      }
+
+      document.addEventListener('DOMContentLoaded', function(){
+        applySavedOrder();
+        attachDragHandlers();
+      });
+
+      // expose save/apply for debugging if needed
+      window._gamesTableColumns = { saveOrder, applySavedOrder };
+    })();
+  </script>
+
 </body>
 </html>
+
